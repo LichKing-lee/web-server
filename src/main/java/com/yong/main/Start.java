@@ -1,27 +1,21 @@
 package com.yong.main;
 
-import java.io.BufferedReader;
+import com.yong.request.RequestHandler;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import static java.util.stream.Collectors.joining;
 
 public class Start {
     public static void main(String[] args) {
         try(ServerSocket serverSocket = new ServerSocket(9000)) {
+            System.out.println("start web server");
             Socket socket;
-            while((socket = serverSocket.accept()) != null) {
-                String message = new BufferedReader(new InputStreamReader(socket.getInputStream())).lines()
-                .collect(joining("\n"));
-
-                System.out.println(message);
+            while((socket = serverSocket.accept()) != null){
+                RequestHandler handler = new RequestHandler(socket.getInputStream());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch (IOException ie){
+            System.out.println("server io exception");
         }
-
-        System.out.println(999);
     }
 }
